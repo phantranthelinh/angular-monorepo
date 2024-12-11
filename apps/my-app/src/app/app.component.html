@@ -1,0 +1,39 @@
+<h1>Angular Router App</h1>
+<nav>
+  <ul class="flex gap-4 *:cursor-pointer">
+    <li class="hover:opacity-75">
+      <a
+        class="hover:opacity-75 active:text-blue-500"
+        [routerLink]="['/']"
+        routerLinkActive="is-active-link"
+        ariaCurrentWhenActive="page"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >Home</a
+      >
+    </li>
+    <li class="hover:opacity-75">
+      <a
+        class="hover:opacity-75 active:text-blue-500"
+        [routerLink]="['/form']"
+        routerLinkActive="is-active-link"
+        ariaCurrentWhenActive="page"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >Form</a
+      >
+    </li>
+    <li class="hover:opacity-75">
+      <a
+        class="hover:opacity-75 active:text-blue-500"
+        [routerLink]="['/list']"
+        routerLinkActive="is-active-link"
+        ariaCurrentWhenActive="page"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >List</a
+      >
+    </li>
+  </ul>
+</nav>
+
+<div class="w-full max-w-2xl mx-auto pt-10">
+  <router-outlet></router-outlet>
+</div>

@@ -1,0 +1,17 @@
+<div class="multi-select">
+  <button type="button" (click)="toggleDropdown()">Select Options</button>
+  <div *ngIf="isDropdownOpen" class="dropdown">
+    <ul>
+      <li *ngFor="let option of options">
+        <label>
+          <input
+            type="checkbox"
+            [checked]="isSelected(option)"
+            (change)="toggleOption(option)"
+          />
+          {{ option.label }}
+        </label>
+      </li>
+    </ul>
+  </div>
+</div>

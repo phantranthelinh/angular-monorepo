@@ -1,0 +1,125 @@
+<hr />
+<h6>Sign up form</h6>
+<form [formGroup]="userForm" class="flex flex-col mx-8 max-w-7xl" errorTailor>
+  <label for="email">email</label>
+  <input type="text" formControlName="email" />
+
+  <ng-template
+    controlErrorAnchor
+    #anchor="controlErrorAnchor"
+  ></ng-template>
+
+  <label for="password">Password</label>
+  <input type="text" formControlName="password" />
+  <label for="confirmPassword">Confirm Password</label>
+  <input
+    type="text"
+    formControlName="confirmPassword"
+    [controlErrorAnchor]="anchor"
+  />
+  <div>
+    <label for="gender">Gender</label>
+    <div><input type="radio" formControlName="gener" value="male" />Male</div>
+    <div>
+      <input type="radio" formControlName="gener" value="female" />Female
+    </div>
+  </div>
+  <hr />
+
+  <div>
+    <p>multi-select</p>
+    <app-multi-select
+      [options]="options"
+      formControlName="selectedOptions"
+    ></app-multi-select>
+  </div>
+  <hr />
+
+  <p>Address</p>
+  <div class="form-group" formGroupName="address">
+    <input class="form-control" formControlName="name" placeholder="Name" />
+  </div>
+
+  <section formGroupName="address">
+    <div class="form-group">
+      <input class="form-control" formControlName="city" placeholder="City" />
+    </div>
+
+    <div class="select">
+      <label for="country">Country</label>
+      <select
+        formControlName="country"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+      >
+        <ng-container *ngFor="let country of countries$ | async">
+          <option [value]="country">
+            {{ country }}
+          </option>
+        </ng-container>
+      </select>
+    </div>
+  </section>
+
+  <div class="flex gap-4 my-4">
+    <div>
+      <label
+        for="dark"
+        [class]="
+          userForm.get('theme')?.value === 'dark'
+            ? 'border-blue-500 border-2'
+            : ''
+        "
+        class="cursor-pointer bg-gray-600 border w-20 h-20 rounded-lg grid place-content-center"
+      ></label>
+      <input
+        id="dark"
+        hidden
+        type="radio"
+        formControlName="theme"
+        value="dark"
+      />
+      <span>Dark</span>
+    </div>
+    <div>
+      <label
+        for="light"
+        [class]="
+          userForm.get('theme')?.value === 'light'
+            ? 'border-blue-500 border-2'
+            : ''
+        "
+        class="cursor-pointer bg-white w-20 border h-20 rounded-lg grid place-content-center text-gray-600"
+      ></label>
+      <input
+        type="radio"
+        id="light"
+        hidden
+        formControlName="theme"
+        value="light"
+      />
+      <span>Light</span>
+    </div>
+  </div>
+  <div formArrayName="skills">
+    <span>Skills:</span>
+    <div
+      class="flex gap-3"
+      *ngFor="let skill of skills.controls; let i = index"
+      [formGroupName]="i"
+    >
+      <div class="flex flex-col">
+        <input formControlName="name" placeholder="Enter a name skill" />
+      </div>
+      <div class="flex flex-col">
+        <input formControlName="level" placeholder="Enter a level of skill" />
+      </div>
+      <button (click)="removeSkill(i)" type="button">Remove</button>
+      <hr />
+    </div>
+  </div>
+  <button class="my-4 w-[200px]" type="button" (click)="addNewSkill()">
+    Add new skill
+  </button>
+
+  <button (click)="onSignUp()">Sign up</button>
+</form>
