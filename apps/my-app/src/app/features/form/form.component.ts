@@ -36,7 +36,7 @@ export class FormComponent implements OnInit {
 
   ngOnInit() {
     this.initializeForm();
-    this.formStore.loadCountryNames();
+    this.formStore.getCountryNames();
   }
 
   private initializeForm(): void {

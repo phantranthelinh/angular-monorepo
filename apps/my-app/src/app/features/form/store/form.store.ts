@@ -1,6 +1,8 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
-import { catchError, map, of, tap } from 'rxjs';
+import { tapResponse } from '@ngrx/operators';
+import { exhaustMap, map } from 'rxjs';
 import { CountryService } from '../services/country.service';
 import { Country, Option } from '../types/form.type';
 
@@ -28,26 +30,6 @@ export class FormStore extends ComponentStore<State> {
     super(initialState);
   }
 
-  loadCountryNames(): void {
-    this.setLoading(true);
-    this.countryService
-      .loadCountries()
-      .pipe(
-        map((country) =>
-          country.map((country: Country) => country.name.common)
-        ),
-        tap((countries) => {
-          this.setCountries(countries);
-          this.setLoading(false);
-        }),
-        catchError((error) => {
-          this.setLoading(false);
-          return of(error);
-        })
-      )
-      .subscribe();
-  }
-
   // Method to update loading state
   private setLoading(loading: boolean): void {
     this.setState((state) => ({
@@ -72,4 +54,22 @@ export class FormStore extends ComponentStore<State> {
   }
 
   readonly vm$ = this.select((state) => state).pipe(map(this.getStateSnapshot));
+
+  readonly getCountryNames = this.effect<void>((trigger$) =>
+    trigger$.pipe(
+      exhaustMap(() =>
+        this.countryService.loadCountries().pipe(
+          map((country) =>
+            country.map((country: Country) => country.name.common)
+          ),
+          tapResponse({
+            next: (data) => {
+              this.setCountries(data);
+            },
+            error: (error: HttpErrorResponse) => console.log(error),
+          })
+        )
+      )
+    )
+  );
 }
