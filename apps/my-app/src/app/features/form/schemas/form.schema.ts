@@ -7,7 +7,7 @@ export const formSchema = {
   email: ['', Validators.required],
   password: ['', Validators.required],
   confirmPassword: ['', Validators.required],
-  gener: ['male'],
+  gender: ['male'],
   selectedOptions: [[], Validators.required], //use empty array
   theme: ['dark', Validators.required],
   address: formBuilder.group({

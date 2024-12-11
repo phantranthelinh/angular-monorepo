@@ -4,10 +4,7 @@
   <label for="email">email</label>
   <input type="text" formControlName="email" />
 
-  <ng-template
-    controlErrorAnchor
-    #anchor="controlErrorAnchor"
-  ></ng-template>
+  <ng-template controlErrorAnchor #anchor="controlErrorAnchor"></ng-template>
 
   <label for="password">Password</label>
   <input type="text" formControlName="password" />
@@ -19,46 +16,46 @@
   />
   <div>
     <label for="gender">Gender</label>
-    <div><input type="radio" formControlName="gener" value="male" />Male</div>
+    <div><input type="radio" formControlName="gender" value="male" />Male</div>
     <div>
-      <input type="radio" formControlName="gener" value="female" />Female
+      <input type="radio" formControlName="gender" value="female" />Female
     </div>
   </div>
   <hr />
+  <ng-container *ngIf="vm$ | async as vm">
+    <div>
+      <p>multi-select</p>
+      <app-multi-select
+        [options]="vm.options"
+        formControlName="selectedOptions"
+      ></app-multi-select>
+    </div>
+    <hr />
 
-  <div>
-    <p>multi-select</p>
-    <app-multi-select
-      [options]="options"
-      formControlName="selectedOptions"
-    ></app-multi-select>
-  </div>
-  <hr />
-
-  <p>Address</p>
-  <div class="form-group" formGroupName="address">
-    <input class="form-control" formControlName="name" placeholder="Name" />
-  </div>
-
-  <section formGroupName="address">
-    <div class="form-group">
-      <input class="form-control" formControlName="city" placeholder="City" />
+    <p>Address</p>
+    <div class="form-group" formGroupName="address">
+      <input class="form-control" formControlName="name" placeholder="Name" />
     </div>
 
-    <div class="select">
-      <label for="country">Country</label>
-      <select
-        formControlName="country"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-      >
-        <ng-container *ngFor="let country of countries ">
-          <option [value]="country">
-            {{ country }}
-          </option>
-        </ng-container>
-      </select>
-    </div>
-  </section>
+    <section formGroupName="address">
+      <div class="form-group">
+        <input class="form-control" formControlName="city" placeholder="City" />
+      </div>
+      <div class="select">
+        <label for="country">Country</label>
+        <select
+          formControlName="country"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        >
+          <ng-container *ngFor="let country of vm.countries">
+            <option [value]="country">
+              {{ country }}
+            </option>
+          </ng-container>
+        </select>
+      </div>
+    </section>
+  </ng-container>
 
   <div class="flex gap-4 my-4">
     <div>

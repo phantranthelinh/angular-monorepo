@@ -4,10 +4,9 @@ import {
   FormArray,
   FormBuilder,
   FormGroup,
-  ReactiveFormsModule
+  ReactiveFormsModule,
 } from '@angular/forms';
 import { errorTailorImports } from '@ngneat/error-tailor';
-import { Observable } from 'rxjs';
 import { MultiSelectComponent } from '../../shared/components/multi-select/multi-select.component';
 import { passwordMatchValidator } from '../../shared/validators/password-match.validator';
 import { createSkillGroup, formSchema } from './schemas/form.schema';
@@ -28,46 +27,54 @@ import { FormStore } from './store/form.store';
 })
 export class FormComponent implements OnInit {
   title = 'Form';
-  formStore = inject(FormStore);
-  formBuilder: FormBuilder = inject(FormBuilder);
   userForm!: FormGroup;
-  private vm$: any;
+  private formStore = inject(FormStore);
+  private formBuilder = inject(FormBuilder);
+
+  // ViewModel observable
+  vm$ = this.formStore.vm$;
+
   ngOnInit() {
-    this.formStore.vm$.subscribe((vm) => {
-      this.vm$ = vm;
-    });
+    this.initializeForm();
+    this.formStore.loadCountryNames();
+  }
+
+  private initializeForm(): void {
     this.userForm = this.formBuilder.group(formSchema, {
       validators: passwordMatchValidator,
     });
   }
-  get countries(){
-    return this.vm$.countries;
-  }
-  get options() {
-    return this.vm$.options;
-  }
+
   get skills(): FormArray {
     return this.userForm.get('skills') as FormArray;
   }
 
-  addNewSkill() {
-    const skills = this.userForm.get('skills') as FormArray;
-    skills.push(createSkillGroup());
+  addNewSkill(): void {
+    this.skills.push(createSkillGroup());
   }
-  removeSkill(index: number) {
-    const skills = this.userForm.get('skills') as FormArray;
-    skills.removeAt(index);
+
+  removeSkill(index: number): void {
+    this.skills.removeAt(index);
   }
-  onSignUp() {
+
+  onSignUp(): void {
     if (this.userForm.valid) {
-      console.log('Form Submitted', this.userForm.value);
-      // Handle sign-up logic here
+      this.handleSubmit();
     } else {
-      console.log(this.userForm.value);
-      console.log(
-        this.userForm.get('confirmPassword')?.hasError('passwordNotMatch')
-      );
-      // console.error('Form is invalid');
+      this.logInvalidForm();
     }
+  }
+
+  private handleSubmit(): void {
+    console.log('Form Submitted', this.userForm.value);
+    // Handle sign-up logic here
+  }
+
+  private logInvalidForm(): void {
+    console.log('Form is invalid:', this.userForm.value);
+    console.log(
+      'Confirm Password Error:',
+      this.userForm.get('confirmPassword')?.hasError('passwordNotMatch')
+    );
   }
 }
