@@ -36,11 +36,12 @@
     <div class="form-group" formGroupName="address">
       <input class="form-control" formControlName="name" placeholder="Name" />
     </div>
-
     <section formGroupName="address">
       <div class="form-group">
         <input class="form-control" formControlName="city" placeholder="City" />
       </div>
+      <div *ngIf="vm.loading">Loading countries...</div>
+
       <div class="select">
         <label for="country">Country</label>
         <select

@@ -1,15 +1,17 @@
 import { inject, Injectable } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
-import { map, skip, tap } from 'rxjs';
+import { catchError, map, of, tap } from 'rxjs';
 import { CountryService } from '../services/country.service';
 import { Country, Option } from '../types/form.type';
 
 interface State {
   countries: string[];
   options: Option[];
+  loading: boolean;
 }
 // Initial state of the store
 const initialState: State = {
+  loading: false,
   countries: [],
   options: [
     { label: 'Option 1', value: 1 },
@@ -27,15 +29,31 @@ export class FormStore extends ComponentStore<State> {
   }
 
   loadCountryNames(): void {
+    this.setLoading(true);
     this.countryService
       .loadCountries()
       .pipe(
         map((country) =>
           country.map((country: Country) => country.name.common)
         ),
-        tap((countries) => this.setCountries(countries))
+        tap((countries) => {
+          this.setCountries(countries);
+          this.setLoading(false);
+        }),
+        catchError((error) => {
+          this.setLoading(false);
+          return of(error);
+        })
       )
       .subscribe();
+  }
+
+  // Method to update loading state
+  private setLoading(loading: boolean): void {
+    this.setState((state) => ({
+      ...state,
+      loading,
+    }));
   }
 
   private setCountries(countries: string[]): void {
@@ -49,11 +67,9 @@ export class FormStore extends ComponentStore<State> {
     return {
       countries: state.countries,
       options: state.options,
+      loading: state.loading,
     };
   }
 
-  readonly vm$ = this.select((state) => state).pipe(
-    map(this.getStateSnapshot),
-    skip(1) // Skip the initial state emission
-  );
+  readonly vm$ = this.select((state) => state).pipe(map(this.getStateSnapshot));
 }
