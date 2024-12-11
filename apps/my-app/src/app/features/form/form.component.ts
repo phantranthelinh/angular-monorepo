@@ -31,7 +31,6 @@ export class FormComponent implements OnInit {
   formStore = inject(FormStore);
   formBuilder: FormBuilder = inject(FormBuilder);
   userForm!: FormGroup;
-  countries$: Observable<string[]> = this.formStore.countries$;
   private vm$: any;
   ngOnInit() {
     this.formStore.vm$.subscribe((vm) => {
@@ -41,7 +40,9 @@ export class FormComponent implements OnInit {
       validators: passwordMatchValidator,
     });
   }
-
+  get countries(){
+    return this.vm$.countries;
+  }
   get options() {
     return this.vm$.options;
   }

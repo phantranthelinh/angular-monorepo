@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
-import { tap } from 'rxjs';
+import { map, skip, tap } from 'rxjs';
 import { CountryService } from '../services/country.service';
 import { Option } from '../types/form.type';
 
@@ -34,12 +34,15 @@ export class FormStore extends ComponentStore<State> {
       )
       .subscribe();
   }
-  readonly countries$ = this.select((state) => state.countries);
-  readonly options$ = this.select((state) => state.options);
 
-  readonly vm$ = this.select(
-    this.countries$,
-    this.options$,
-    (countries, options) => ({ countries, options })
+  private getStateSnapshot(state: State) {
+    return {
+      countries: state.countries,
+      options: state.options,
+    };
+  }
+  readonly vm$ = this.select((state) => state).pipe(
+    map(this.getStateSnapshot),
+    skip(1)
   );
 }
