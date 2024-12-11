@@ -12,7 +12,10 @@ import { passwordMatchValidator } from '../../shared/validators/password-match.v
 import { createSkillGroup, formSchema } from './schemas/form.schema';
 import { CountryService } from './services/country.service';
 import { FormStore } from './store/form.store';
-
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { Select } from 'primeng/select';
+import { PasswordModule } from 'primeng/password';
 @Component({
   selector: 'app-form',
   templateUrl: './form.component.html',
@@ -22,6 +25,10 @@ import { FormStore } from './store/form.store';
     ReactiveFormsModule,
     errorTailorImports,
     CommonModule,
+    ButtonModule,
+    InputTextModule,
+    PasswordModule,
+    Select
   ],
   providers: [FormStore, CountryService, FormBuilder],
 })

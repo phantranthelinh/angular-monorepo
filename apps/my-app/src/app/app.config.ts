@@ -3,7 +3,9 @@ import { provideRouter } from '@angular/router';
 import { appRoutes } from './app.routes';
 import { provideHttpClient } from '@angular/common/http';
 import { provideErrorTailorConfig } from '@ngneat/error-tailor';
-
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { providePrimeNG } from 'primeng/config';
+import { MyPreset } from './my-preset';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
@@ -19,9 +21,15 @@ export const appConfig: ApplicationConfig = {
           invalidAddress: () => `Address isn't valid`,
         },
       },
-      controlErrorsOn:{
-        blur: true
-      }
+      controlErrorsOn: {
+        blur: true,
+      },
+    }),
+    provideAnimationsAsync(),
+    providePrimeNG({
+      theme: {
+        preset: MyPreset,
+      },
     }),
   ],
 };

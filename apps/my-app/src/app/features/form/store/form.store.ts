@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
 import { tapResponse } from '@ngrx/operators';
-import { exhaustMap, map } from 'rxjs';
+import { exhaustMap, map, tap } from 'rxjs';
 import { CountryService } from '../services/country.service';
 import { Country, Option } from '../types/form.type';
 
@@ -59,12 +59,14 @@ export class FormStore extends ComponentStore<State> {
     trigger$.pipe(
       exhaustMap(() =>
         this.countryService.loadCountries().pipe(
+          tap(() => this.setLoading(true)),
           map((country) =>
             country.map((country: Country) => country.name.common)
           ),
           tapResponse({
             next: (data) => {
               this.setCountries(data);
+              this.setLoading(false);
             },
             error: (error: HttpErrorResponse) => console.log(error),
           })

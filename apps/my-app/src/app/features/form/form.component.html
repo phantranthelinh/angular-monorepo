@@ -2,15 +2,18 @@
 <h6>Sign up form</h6>
 <form [formGroup]="userForm" class="flex flex-col mx-8 max-w-7xl" errorTailor>
   <label for="email">email</label>
-  <input type="text" formControlName="email" />
+  <input pInputText type="text"  formControlName="email" />
 
   <ng-template controlErrorAnchor #anchor="controlErrorAnchor"></ng-template>
 
   <label for="password">Password</label>
-  <input type="text" formControlName="password" />
+  <p-password type="text" size="small" formControlName="password" toggleMask="true" />
   <label for="confirmPassword">Confirm Password</label>
-  <input
+  <p-password
     type="text"
+    toggleMask="true"
+    size="small"
+    [feedback]="false" 
     formControlName="confirmPassword"
     [controlErrorAnchor]="anchor"
   />
@@ -34,26 +37,31 @@
 
     <p>Address</p>
     <div class="form-group" formGroupName="address">
-      <input class="form-control" formControlName="name" placeholder="Name" />
+      <input
+        pInputText
+        class="form-control"
+        formControlName="name"
+        placeholder="Name"
+      />
     </div>
     <section formGroupName="address">
       <div class="form-group">
-        <input class="form-control" formControlName="city" placeholder="City" />
+        <input
+          pInputText
+          class="form-control"
+          formControlName="city"
+          placeholder="City"
+        />
       </div>
       <div *ngIf="vm.loading">Loading countries...</div>
-
       <div class="select">
         <label for="country">Country</label>
-        <select
+        <p-select
+          [options]="vm.countries"
           formControlName="country"
-          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          class="w-full"
         >
-          <ng-container *ngFor="let country of vm.countries">
-            <option [value]="country">
-              {{ country }}
-            </option>
-          </ng-container>
-        </select>
+        </p-select>
       </div>
     </section>
   </ng-container>
@@ -106,18 +114,36 @@
       [formGroupName]="i"
     >
       <div class="flex flex-col">
-        <input formControlName="name" placeholder="Enter a name skill" />
+        <input
+          pInputText
+          formControlName="name"
+          placeholder="Enter a name skill"
+        />
       </div>
       <div class="flex flex-col">
-        <input formControlName="level" placeholder="Enter a level of skill" />
+        <input
+          pInputText
+          formControlName="level"
+          placeholder="Enter a level of skill"
+        />
       </div>
-      <button (click)="removeSkill(i)" type="button">Remove</button>
+      <button pButton pRipple (click)="removeSkill(i)" type="button">
+        Remove
+      </button>
       <hr />
     </div>
   </div>
-  <button class="my-4 w-[200px]" type="button" (click)="addNewSkill()">
+  <button
+    pButton
+    pRipple
+    class="my-4 w-[200px]"
+    type="button"
+    (click)="addNewSkill()"
+  >
     Add new skill
   </button>
 
-  <button (click)="onSignUp()">Sign up</button>
+  <button pButton pRipple severity="secondary" (click)="onSignUp()">
+    Sign up
+  </button>
 </form>
