@@ -16,6 +16,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { Select } from 'primeng/select';
 import { PasswordModule } from 'primeng/password';
+import { CurrencyPipe } from "../../shared/pipes/currency.pipe";
 @Component({
   selector: 'app-form',
   templateUrl: './form.component.html',
@@ -28,8 +29,9 @@ import { PasswordModule } from 'primeng/password';
     ButtonModule,
     InputTextModule,
     PasswordModule,
-    Select
-  ],
+    Select,
+    CurrencyPipe
+],
   providers: [FormStore, CountryService, FormBuilder],
 })
 export class FormComponent implements OnInit {
