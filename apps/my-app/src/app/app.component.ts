@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterLinkActive, RouterModule, RouterOutlet } from '@angular/router';
-import { fromEvent, interval, mergeMap, switchMap, take } from 'rxjs';
+import { fromEvent, interval, mergeMap, take } from 'rxjs';
 
 @Component({
   imports: [RouterModule, RouterLinkActive, RouterOutlet],
